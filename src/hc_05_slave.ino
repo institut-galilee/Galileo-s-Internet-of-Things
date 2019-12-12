@@ -1,4 +1,4 @@
-#include <SoftwareSerial.h>   // librairie pour creer une nouvelle connexion serie max 9600 baud
+#include <SoftwareSerial.h>
 #define PIN_LED 13
 
 SoftwareSerial BTSerial(0, 1); // RX | TX  = > BT-TX=10 BT-RX=11
@@ -14,34 +14,18 @@ void setup()
 
 void loop()
 {
-  String message;
-    // Boucle de lecture sur le BT
-    // Reading BT
-    while (BTSerial.available()){
-      // Lecture du message envoyé par le BT
-      // Read message send by BT
+    String message;
+    while (BTSerial.available())
+    {
       message = BTSerial.readString();
-      // Ecriture du message dans le serial usb
-      // write in serial usb
       Serial.println(message);
     }
-    // Boucle de lecture sur le serial usb
-    // Reading serial usb
-    while (Serial.available()){
-      // Lecture du message envoyé par le serial usb
-      // Read message send by serial usb
-      message = Serial.readString();
-      // Ecriture du message dans le BT
-      // write in BT 
-      BTSerial.println(message);
+    if(message == "on\r\n")
+    {
+      digitalWrite(PIN_LED,HIGH);
     }
-
-  // si mon message est egal a "on"  ( + retour chariot et nouvelle ligne )
-  // if message equal to "on" (+ carriage return and newline )
-    if(message == "on\r\n"){
-      digitalWrite(PIN_LED,HIGH); // led on
-    }// else if message off
-    else if(message == "off\r\n"){
-      digitalWrite(PIN_LED,LOW);  // led off
+    else if(message == "off\r\n")
+    {
+      digitalWrite(PIN_LED,LOW);  
     }
 }
